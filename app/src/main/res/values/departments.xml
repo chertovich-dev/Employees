@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="department_names">
+        <item>Все</item>
+        <item>Designers</item>
+        <item>Analytics</item>
+        <item>Managers</item>
+        <item>IOS</item>
+        <item>Android</item>
+        <item>QA</item>
+        <item>Back office</item>
+        <item>Frontend</item>
+        <item>HR</item>
+        <item>PR</item>
+        <item>Backend</item>
+        <item>Support</item>
+    </string-array>
+
+    <string-array name="department_codes">
+        <item>all</item>
+        <item>design</item>
+        <item>analytics</item>
+        <item>management</item>
+        <item>ios</item>
+        <item>android</item>
+        <item>qa</item>
+        <item>back_office</item>
+        <item>frontend</item>
+        <item>hr</item>
+        <item>pr</item>
+        <item>backend</item>
+        <item>support</item>
+    </string-array>
+</resources>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/item_padding"
+    android:paddingEnd="@dimen/item_padding"
+    android:paddingTop="@dimen/item_padding"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/design_default_color_error" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/imageView"
+        app:layout_constraintBottom_toTopOf="@id/textViewPosition"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        android:layout_marginStart="@dimen/margin"
+        android:background="@color/cardview_shadow_end_color"
+        android:textSize="@dimen/name_text_size"
+        android:textStyle="bold"
+        android:text="Чертович Сергей"/>
+
+    <TextView
+        android:id="@+id/textViewPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Designer"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/textViewName"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginTop="@dimen/small_margin"/>
+
+    <TextView
+        android:id="@+id/textViewUserTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/textViewName"
+        app:layout_constraintTop_toTopOf="@+id/textViewName"
+        android:layout_marginStart="@dimen/margin"
+        android:text="an" />
+
+    <TextView
+        android:id="@+id/textViewBirthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/textViewName"
+        app:layout_constraintBottom_toBottomOf="@id/textViewPosition"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="22 янв"
+        android:textSize="@dimen/birthday_text_size"/>
+
+    <View
+        android:id="@+id/dividerYear1"
+        android:layout_width="@dimen/divider_year_size"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textViewYear"
+        app:layout_constraintTop_toTopOf="@id/textViewYear"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewYear"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+
+    <TextView
+        android:id="@+id/textViewYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/dividerYear1"
+        app:layout_constraintEnd_toStartOf="@+id/dividerYear2"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        android:textSize="@dimen/year_text_size"
+        android:layout_marginVertical="@dimen/margin"
+        android:text="2022"/>
+
+    <View
+        android:id="@+id/dividerYear2"
+        android:layout_width="@dimen/divider_year_size"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toEndOf="@+id/textViewYear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewYear"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewYear" />
+</androidx.constraintlayout.widget.ConstraintLayout>
