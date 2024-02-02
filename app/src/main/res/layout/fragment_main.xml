@@ -6,13 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".view.MainFragment">
 
+    <EditText
+        android:id="@+id/editTextFilter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_filter"
+        android:layout_marginLeft="@dimen/margin_filter"
+        android:background="@drawable/textview_filter"
+        android:drawableLeft="@drawable/ic_filter"
+        android:hint="@string/input_name_surname_tag"
+        android:inputType="text"
+        android:padding="@dimen/padding_filter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonSorting" />
+
+    <ImageButton
+        android:id="@+id/imageButtonSorting"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextFilter"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextFilter"
+        android:background="@drawable/button_sorting"
+        android:src="@drawable/ic_sorting"
+        android:layout_marginEnd="@dimen/margin_filter"
+        android:paddingEnd="@dimen/padding_filter" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextFilter"
         app:tabMode="scrollable">
     </com.google.android.material.tabs.TabLayout>
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/margin">
+
+    <TextView
+        android:id="@+id/textViewSorting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sorting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="@dimen/sorting_text_size"
+        android:textStyle="bold"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSorting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButtonAlphabet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/by_alphabet"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/by_birthday"/>
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

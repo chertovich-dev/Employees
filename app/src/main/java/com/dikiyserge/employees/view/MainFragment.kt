@@ -5,14 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dikiyserge.employees.R
+import com.dikiyserge.employees.data.Department
+import com.dikiyserge.employees.data.EmployeeItem
+import com.dikiyserge.employees.databinding.FragmentMainBinding
 import com.dikiyserge.employees.model.Repository
 import com.dikiyserge.employees.viewmodel.MainViewModel
 import com.dikiyserge.employees.viewmodel.MainViewModelFactory
+import com.dikiyserge.employees.viewmodel.SortType
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
@@ -21,42 +27,61 @@ class MainFragment : Fragment(), OnTabSelectedListener {
         MainViewModelFactory(Repository(requireActivity().applicationContext))
     }
 
+    private var _binding: FragmentMainBinding? = null
+
+    private val binding
+        get() = _binding!!
+
+    private lateinit var departments: List<Department>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val tabLayout = view.findViewById<TabLayout>(R.id.tabLayout)
+        binding.tabLayout.addOnTabSelectedListener(this)
 
-        tabLayout.addOnTabSelectedListener(this)
+        viewModel.departmentsLiveData.observe(viewLifecycleOwner) { dep ->
+            departments = dep
 
-        viewModel.departmentsLiveData.observe(viewLifecycleOwner) { departments ->
-            for (department in departments) {
-                val tab = tabLayout.newTab()
+            for ((index, department) in departments.withIndex()) {
+                val tab = binding.tabLayout.newTab()
                 tab.text = department.name
-                tabLayout.addTab(tab)
+                tab.id = index
+                binding.tabLayout.addTab(tab)
             }
         }
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.employeeItemsLiveData.observe(viewLifecycleOwner) { employeeItems ->
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = EmployeeRecyclerAdapter(employeeItems)
-
+            binding.recyclerView.adapter = EmployeeRecyclerAdapter(employeeItems)
         }
 
         if (savedInstanceState == null) {
             viewModel.loadEmployees()
         }
+
+        binding.editTextFilter.addTextChangedListener { text ->
+            viewModel.filter = text?.toString()?.ifEmpty { null }
+        }
+
+        binding.imageButtonSorting.setOnClickListener {
+            SortingListDialogFragment.newInstance(viewModel.sorting).show(parentFragmentManager, null)
+        }
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        //
+        if (tab != null) {
+            if (tab.id in departments.indices) {
+                val department = departments[tab.id]
+                viewModel.department = department.code
+            }
+        }
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -65,6 +90,11 @@ class MainFragment : Fragment(), OnTabSelectedListener {
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
         //
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

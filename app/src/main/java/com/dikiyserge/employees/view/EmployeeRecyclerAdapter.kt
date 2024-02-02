@@ -10,6 +10,7 @@ import com.dikiyserge.employees.R
 import com.dikiyserge.employees.data.Employee
 import com.dikiyserge.employees.data.EmployeeItem
 import com.dikiyserge.employees.data.EmployeeItemType
+import java.time.format.DateTimeFormatter
 
 private const val EMPTY_NAME = "                                     "
 private const val EMPTY_POSITION = "                    "
@@ -55,6 +56,13 @@ class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
         }
     }
 
+    private fun setEmployeeValues(holder: EmployeeViewHolder, employeeItem: EmployeeItem, setYear: Boolean) {
+        holder.textViewName.text = employeeItem.employee?.name
+        holder.textViewUserTag.text = employeeItem.employee?.userTag?.lowercase()
+        holder.textViewPosition.text = employeeItem.employee?.position
+        holder.textViewBirthday.text = employeeItem.employee?.birthdayDate?.format(DateTimeFormatter.ofPattern("dd MMM"))
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_employee, parent, false)
         return EmployeeViewHolder(itemView)
@@ -66,15 +74,23 @@ class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
         setVisibilities(holder, employeeItem)
         setEmptyStyle(holder, employeeItem.itemType == EmployeeItemType.EMPTY)
 
-//        when (employeeItem.itemType) {
-//            EmployeeItemType.EMPTY -> {
-//                setEmptyStyle(holder)
-//            }
-//
-//            EmployeeItemType.EMPLOYEE -> TODO()
-//            EmployeeItemType.EMPLOYEE_DATE -> TODO()
-//            EmployeeItemType.DATE_SEPARATOR -> TODO()
-//        }
+        when (employeeItem.itemType) {
+            EmployeeItemType.EMPTY -> {
+                //
+            }
+
+            EmployeeItemType.EMPLOYEE -> {
+                setEmployeeValues(holder, employeeItem, false)
+            }
+
+            EmployeeItemType.EMPLOYEE_DATE -> {
+                setEmployeeValues(holder, employeeItem, true)
+            }
+
+            EmployeeItemType.DATE_SEPARATOR -> {
+                holder.textViewYear.text = employeeItem.date
+            }
+        }
 
         //holder.textView.text = "text"//employeeItems[position]. employees[position].firstName
     }
