@@ -15,7 +15,11 @@ import java.time.format.DateTimeFormatter
 private const val EMPTY_NAME = "                                     "
 private const val EMPTY_POSITION = "                    "
 
-class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
+interface OnEmployeeListener {
+    fun onSelectEmployee(employee: Employee)
+}
+
+class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>, private val listener: OnEmployeeListener) :
     RecyclerView.Adapter<EmployeeRecyclerAdapter.EmployeeViewHolder>() {
 
     private fun setVisibilities(holder: EmployeeViewHolder, employeeItem: EmployeeItem) {
@@ -39,7 +43,7 @@ class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
         view.visibility = if (visible) {
             View.VISIBLE
         } else {
-            View.INVISIBLE
+            View.GONE
         }
     }
 
@@ -56,11 +60,53 @@ class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
         }
     }
 
-    private fun setEmployeeValues(holder: EmployeeViewHolder, employeeItem: EmployeeItem, setYear: Boolean) {
+    private fun setEmployeeValues(holder: EmployeeViewHolder, employeeItem: EmployeeItem, setBirthday: Boolean) {
         holder.textViewName.text = employeeItem.employee?.name
         holder.textViewUserTag.text = employeeItem.employee?.userTag?.lowercase()
         holder.textViewPosition.text = employeeItem.employee?.position
-        holder.textViewBirthday.text = employeeItem.employee?.birthdayDate?.format(DateTimeFormatter.ofPattern("dd MMM"))
+
+        if (setBirthday) {
+            holder.textViewBirthday.text =
+                employeeItem.employee?.birthdayDate?.format(DateTimeFormatter.ofPattern("dd MMM"))
+        }
+    }
+
+    private fun setEmployeeEvents(employeeViewHolder: EmployeeViewHolder) {
+        employeeViewHolder.itemView.setOnClickListener {
+            onClick(employeeViewHolder)
+        }
+
+        employeeViewHolder.textViewName.setOnClickListener {
+            onClick(employeeViewHolder)
+        }
+
+        employeeViewHolder.textViewUserTag.setOnClickListener {
+            onClick(employeeViewHolder)
+        }
+
+        employeeViewHolder.textViewPosition.setOnClickListener {
+            onClick(employeeViewHolder)
+        }
+
+        employeeViewHolder.imageView.setOnClickListener {
+            onClick(employeeViewHolder)
+        }
+
+        employeeViewHolder.textViewBirthday.setOnClickListener {
+            onClick(employeeViewHolder)
+        }
+    }
+
+    private fun onClick(employeeViewHolder: EmployeeViewHolder) {
+        val position = employeeViewHolder.absoluteAdapterPosition
+
+        if (position in employeeItems.indices) {
+            val employee = employeeItems[position].employee
+
+            if (employee != null) {
+                listener.onSelectEmployee(employee)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
@@ -81,10 +127,12 @@ class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
 
             EmployeeItemType.EMPLOYEE -> {
                 setEmployeeValues(holder, employeeItem, false)
+                setEmployeeEvents(holder)
             }
 
             EmployeeItemType.EMPLOYEE_DATE -> {
                 setEmployeeValues(holder, employeeItem, true)
+                setEmployeeEvents(holder)
             }
 
             EmployeeItemType.DATE_SEPARATOR -> {
@@ -92,7 +140,6 @@ class EmployeeRecyclerAdapter(private val employeeItems: List<EmployeeItem>) :
             }
         }
 
-        //holder.textView.text = "text"//employeeItems[position]. employees[position].firstName
     }
 
     override fun getItemCount(): Int {

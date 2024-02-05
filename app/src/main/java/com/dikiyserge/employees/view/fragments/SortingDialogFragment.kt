@@ -1,4 +1,4 @@
-package com.dikiyserge.employees.view
+package com.dikiyserge.employees.view.fragments
 
 import android.os.Bundle
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

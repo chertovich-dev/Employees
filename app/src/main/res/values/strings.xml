@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Employees</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="input_name_surname_tag">Введите имя, фамилию, тег...</string>
     <string name="sorting">Сортировка</string>
     <string name="by_alphabet">По алфавиту</string>
     <string name="by_birthday">По дню рождению</string>
+    <string name="error_text1">Какой-то сверхразум все сломал</string>
+    <string name="error_text2">Постараемся быстро починить</string>
+    <string name="try_agrain">Попробовать снова</string>
+    <string name="years">года</string>
 </resources>

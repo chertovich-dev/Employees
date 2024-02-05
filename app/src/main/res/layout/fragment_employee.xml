@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.fragments.EmployeeFragment"
+    android:layout_marginTop="@dimen/big_margin">
+
+    <ImageView
+        android:id="@+id/imageViewBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin"
+        android:src="@drawable/ic_back"
+        android:padding="@dimen/margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="@dimen/avatar_big_size"
+        android:layout_height="@dimen/avatar_big_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="@dimen/margin"
+        android:background="@drawable/imageview_avatar" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textViewUserTag"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        android:layout_marginTop="@dimen/margin"
+        android:text="name"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:textStyle="bold"
+        android:textSize="@dimen/name_text_big_size"/>
+
+    <TextView
+        android:id="@+id/textViewUserTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/textViewName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewName"
+        app:layout_constraintBottom_toBottomOf="@id/textViewName"
+        android:layout_marginHorizontal="@dimen/margin"
+        android:text="usertag"/>
+
+    <TextView
+        android:id="@+id/textViewPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewName"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:text="position"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewPosition"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/big_margin"
+        android:padding="@dimen/big_margin"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/imageViewStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/textViewBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/imageViewStar"
+            app:layout_constraintTop_toTopOf="@id/imageViewStar"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewStar"
+            android:layout_marginHorizontal="@dimen/margin"
+            android:text="3 апреля 1992"/>
+
+        <TextView
+            android:id="@+id/textViewAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imageViewStar"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewStar"
+            android:text="24 года"/>
+
+        <ImageView
+            android:id="@+id/imageViewPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewStar"
+            android:layout_marginTop="@dimen/big_margin"
+            android:src="@drawable/ic_phone" />
+
+        <TextView
+            android:id="@+id/textViewPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/imageViewPhone"
+            app:layout_constraintTop_toTopOf="@+id/imageViewPhone"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewPhone"
+            android:layout_marginLeft="@dimen/margin"
+            android:text="+7 (999) 900 90 90"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

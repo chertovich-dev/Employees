@@ -1,28 +1,29 @@
-package com.dikiyserge.employees.view
+package com.dikiyserge.employees.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dikiyserge.employees.R
 import com.dikiyserge.employees.data.Department
-import com.dikiyserge.employees.data.EmployeeItem
+import com.dikiyserge.employees.data.Employee
 import com.dikiyserge.employees.databinding.FragmentMainBinding
 import com.dikiyserge.employees.model.Repository
+import com.dikiyserge.employees.view.EmployeeRecyclerAdapter
+import com.dikiyserge.employees.view.OnEmployeeListener
+import com.dikiyserge.employees.view.log
 import com.dikiyserge.employees.viewmodel.MainViewModel
 import com.dikiyserge.employees.viewmodel.MainViewModelFactory
-import com.dikiyserge.employees.viewmodel.SortType
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
-class MainFragment : Fragment(), OnTabSelectedListener {
+class MainFragment : Fragment(), OnTabSelectedListener, OnEmployeeListener {
     private val viewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(Repository(requireActivity().applicationContext))
     }
@@ -59,11 +60,11 @@ class MainFragment : Fragment(), OnTabSelectedListener {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.employeeItemsLiveData.observe(viewLifecycleOwner) { employeeItems ->
-            binding.recyclerView.adapter = EmployeeRecyclerAdapter(employeeItems)
+            binding.recyclerView.adapter = EmployeeRecyclerAdapter(employeeItems, this)
         }
 
         if (savedInstanceState == null) {
-            viewModel.loadEmployees()
+            viewModel.loadEmployees(true)
         }
 
         binding.editTextFilter.addTextChangedListener { text ->
@@ -95,6 +96,11 @@ class MainFragment : Fragment(), OnTabSelectedListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /** OnEmployeeListener */
+    override fun onSelectEmployee(employee: Employee) {
+        viewModel.selectEmployee(employee)
     }
 
     companion object {

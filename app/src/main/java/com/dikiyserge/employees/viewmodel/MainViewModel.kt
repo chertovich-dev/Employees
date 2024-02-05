@@ -13,6 +13,7 @@ import com.dikiyserge.employees.data.Employees
 import com.dikiyserge.employees.model.Repository
 import com.dikiyserge.employees.model.net.NetException
 import com.dikiyserge.employees.view.log
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import java.time.LocalDate
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 private const val EMPLOYEE_START_ITEM_COUNT = 10
+private const val ERROR_DELAY = 2000L
 
 enum class SortType {
     ALPHABET, BIRTHDAY
@@ -66,6 +68,15 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
                 loadEmployeeItems()
             }
         }
+
+    private var nav: Nav? = null
+        set(value) {
+            field = value
+            _navLiveData.value = field
+        }
+
+    private val _navLiveData = MutableLiveData(nav)
+    val navLiveData: LiveData<Nav?> = _navLiveData
 
     private fun getEmployeeItemsOrderedByNames(employees: List<Employee>): List<EmployeeItem> {
         val employeeItems = mutableListOf<EmployeeItem>()
@@ -167,21 +178,45 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         _employeeItemsLiveData.value = employeeItems
     }
 
-    fun loadEmployees() {
+    fun loadEmployees(showError: Boolean = false) {
         viewModelScope.launch {
-            try {
+            val isException: Boolean = try {
                 employees = repository.getEmployees()
                 loadEmployeeItems()
+                false
             }
             catch (e: NetException) {
+
                 log("NetException")
+                true
             }
             catch (e: UnknownHostException) {
+
                 log("UnknownHostException")
+                true
             }
             catch (e: Exception) {
                 log("Exception ${e.toString()}")
+
+                true
+            }
+
+            if (isException && showError) {
+                delay(ERROR_DELAY)
+                nav = MainToErrorNav()
             }
         }
+    }
+
+    fun tryAgain() {
+        nav = ErrorToMainNav()
+    }
+
+    fun selectEmployee(employee: Employee) {
+        nav = MainToEmployee(employee)
+    }
+
+    fun backToMain() {
+        nav = EmployeeToMain()
     }
 }

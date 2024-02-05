@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="avatar_size">75dp</dimen>
+    <dimen name="avatar_big_size">120dp</dimen>
     <dimen name="item_padding">16dp</dimen>
 
     <dimen name="margin">8dp</dimen>
     <dimen name="small_margin">4dp</dimen>
+    <dimen name="big_margin">16dp</dimen>
     <dimen name="birthday_text_size">16sp</dimen>
     <dimen name="name_text_size">16sp</dimen>
+    <dimen name="name_text_big_size">20sp</dimen>
     <dimen name="year_text_size">18sp</dimen>
     <dimen name="divider_year_size">80dp</dimen>
     <dimen name="empty_corner_radius">10.0dip</dimen>
