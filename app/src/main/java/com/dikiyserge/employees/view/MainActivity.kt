@@ -29,12 +29,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.navLiveData.observe(this) { nav ->
             val navController = findNavController( R.id.fragmentContainerView)
 
-            log("!")
             when (nav) {
-                null -> {
-                    //
-                }
-
                 is MainToErrorNav -> {
                     navController.navigate(R.id.action_mainFragment_to_errorFragment)
                 }
@@ -53,6 +48,10 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.action_employeeFragment_to_mainFragment)
                 }
             }
+        }
+
+        if (savedInstanceState == null) {
+            viewModel.loadEmployees(true)
         }
     }
 }

@@ -17,11 +17,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
 
 private const val EMPLOYEE_START_ITEM_COUNT = 10
-private const val ERROR_DELAY = 2000L
+private const val LOAD_DELAY = 2000L
+
+private enum class LoadResult {
+    OK, NoNetwork, Error
+}
 
 enum class SortType {
     ALPHABET, BIRTHDAY
@@ -33,6 +35,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     var departmentsLiveData: LiveData<List<Department>> = MutableLiveData(departments)
 
     private var employees = Employees(listOf())
+
+    private var isEmployeesLoaded = false
 
     private val employeeItems = mutableListOf<EmployeeItem>()
 
@@ -75,8 +79,11 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             _navLiveData.value = field
         }
 
-    private val _navLiveData = MutableLiveData(nav)
-    val navLiveData: LiveData<Nav?> = _navLiveData
+    private val _navLiveData = SingleLiveEvent<Nav>()
+    val navLiveData: LiveData<Nav> = _navLiveData
+
+    private val _messageLiveData = SingleLiveEvent<Message>()
+    val messageLiveData: LiveData<Message> = _messageLiveData
 
     private fun getEmployeeItemsOrderedByNames(employees: List<Employee>): List<EmployeeItem> {
         val employeeItems = mutableListOf<EmployeeItem>()
@@ -159,52 +166,74 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun loadEmployeeItems() {
-        val items = mutableListOf<Employee>()
+    private fun loadEmployeeItems() {
+        if (isEmployeesLoaded) {
+            val items = mutableListOf<Employee>()
 
-        for (employee in employees.items) {
-            if (isNecessaryEmployeeByDepartment(employee) && isNecessaryEmployeeByFilter(employee)) {
-                items.add(employee)
+            for (employee in employees.items) {
+                if (isNecessaryEmployeeByDepartment(employee) && isNecessaryEmployeeByFilter(employee)) {
+                    items.add(employee)
+                }
             }
+
+            employeeItems.clear()
+
+            when (sorting) {
+                SortType.ALPHABET -> employeeItems.addAll(getEmployeeItemsOrderedByNames(items))
+                SortType.BIRTHDAY -> employeeItems.addAll(getEmployeeItemsOrderedByBirthday(items))
+            }
+
+            _employeeItemsLiveData.value = employeeItems
         }
-
-        employeeItems.clear()
-
-        when (sorting) {
-            SortType.ALPHABET -> employeeItems.addAll(getEmployeeItemsOrderedByNames(items))
-            SortType.BIRTHDAY -> employeeItems.addAll(getEmployeeItemsOrderedByBirthday(items))
-        }
-
-        _employeeItemsLiveData.value = employeeItems
     }
 
     fun loadEmployees(showError: Boolean = false) {
         viewModelScope.launch {
-            val isException: Boolean = try {
-                employees = repository.getEmployees()
-                loadEmployeeItems()
-                false
-            }
-            catch (e: NetException) {
+            _messageLiveData.value = Message.Loading
 
-                log("NetException")
-                true
-            }
-            catch (e: UnknownHostException) {
+            val loadResult = LoadEmployeesWithResult()
+            delay(LOAD_DELAY)
 
-                log("UnknownHostException")
-                true
-            }
-            catch (e: Exception) {
-                log("Exception ${e.toString()}")
-
-                true
+            if (loadResult != LoadResult.OK) {
+                if (showError) {
+                    nav = MainToErrorNav()
+                }
             }
 
-            if (isException && showError) {
-                delay(ERROR_DELAY)
-                nav = MainToErrorNav()
+            when (loadResult) {
+                LoadResult.NoNetwork -> {
+                    _messageLiveData.value = Message.NoNetwork
+                }
+
+                LoadResult.Error -> {
+                    _messageLiveData.value = Message.Error
+                }
+
+                else -> {
+                    //
+                }
             }
+        }
+    }
+
+    private suspend fun LoadEmployeesWithResult(): LoadResult {
+        return try {
+            employees = repository.getEmployees()
+            loadEmployeeItems()
+
+            isEmployeesLoaded = true
+            loadEmployeeItems()
+
+            LoadResult.OK
+        }
+        catch (e: UnknownHostException) {
+            LoadResult.NoNetwork
+        }
+        catch (e: NetException) {
+            LoadResult.Error
+        }
+        catch (e: Exception) {
+            LoadResult.Error
         }
     }
 

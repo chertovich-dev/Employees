@@ -5,11 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dikiyserge.employees.R
 import com.dikiyserge.employees.data.Department
 import com.dikiyserge.employees.data.Employee
@@ -20,6 +19,8 @@ import com.dikiyserge.employees.view.OnEmployeeListener
 import com.dikiyserge.employees.view.log
 import com.dikiyserge.employees.viewmodel.MainViewModel
 import com.dikiyserge.employees.viewmodel.MainViewModelFactory
+import com.dikiyserge.employees.viewmodel.Message
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
@@ -61,10 +62,11 @@ class MainFragment : Fragment(), OnTabSelectedListener, OnEmployeeListener {
 
         viewModel.employeeItemsLiveData.observe(viewLifecycleOwner) { employeeItems ->
             binding.recyclerView.adapter = EmployeeRecyclerAdapter(employeeItems, this)
-        }
 
-        if (savedInstanceState == null) {
-            viewModel.loadEmployees(true)
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                viewModel.loadEmployees()
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
         }
 
         binding.editTextFilter.addTextChangedListener { text ->
@@ -73,6 +75,34 @@ class MainFragment : Fragment(), OnTabSelectedListener, OnEmployeeListener {
 
         binding.imageButtonSorting.setOnClickListener {
             SortingListDialogFragment.newInstance(viewModel.sorting).show(parentFragmentManager, null)
+        }
+
+        viewModel.messageLiveData.observe(viewLifecycleOwner) { message ->
+            val messageResId = when (message) {
+                Message.Loading -> {
+                    R.string.loading
+                }
+
+                Message.NoNetwork -> {
+                    R.string.error_no_network
+                }
+
+                Message.Error -> {
+                    R.string.error
+                }
+            }
+
+            val messageText = getString(messageResId)
+
+            val colorResId = if (message == Message.Loading) {
+                 R.color.blue
+            } else {
+                R.color.red
+            }
+
+            val color = getColor(resources, colorResId, null)
+
+            Snackbar.make(binding.recyclerView, messageText, Snackbar.LENGTH_LONG).setBackgroundTint(color).show()
         }
     }
 

@@ -8,4 +8,7 @@
     <string name="error_text2">Постараемся быстро починить</string>
     <string name="try_agrain">Попробовать снова</string>
     <string name="years">года</string>
+    <string name="error_no_network">Не могу обновить данные.\nПроверьте соединение с интернетом.</string>
+    <string name="error">Не могу обновить данные</string>
+    <string name="loading">Секундочку, гружусь...</string>
 </resources>

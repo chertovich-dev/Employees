@@ -5,4 +5,8 @@
     <color name="gray">#CBCBCD</color>
     <color name="light_gray">#e1e1e1</color>
     <color name="link_color">#0000FF</color>
+
+    <color name="blue">#0000FF</color>
+    <color name="red">#FF0000</color>
+
 </resources>
