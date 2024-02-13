@@ -7,6 +7,8 @@ import com.dikiyserge.employees.R
 import com.dikiyserge.employees.viewmodel.MainViewModel
 import com.dikiyserge.employees.viewmodel.MainViewModelFactory
 import androidx.activity.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.findNavController
 import com.dikiyserge.employees.model.Repository
 import com.dikiyserge.employees.view.fragments.KEY_EMPLOYEE
@@ -35,7 +37,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is ErrorToMainNav -> {
+                    log("errorToMainNav")
+                    //val navOptions = NavOptions.Builder().setPopUpTo(R.id.mainFragment, true).build()
+
                     navController.navigate(R.id.action_errorFragment_to_mainFragment)
+
+                    viewModel.loadEmployees(true)
                 }
 
                 is MainToEmployee -> {

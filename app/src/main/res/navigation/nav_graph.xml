@@ -13,6 +13,7 @@
         <action
             android:id="@+id/action_mainFragment_to_errorFragment"
             app:destination="@id/errorFragment"
+            app:launchSingleTop="false"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
@@ -26,7 +27,10 @@
         tools:layout="@layout/fragment_error" >
         <action
             android:id="@+id/action_errorFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/errorFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/employeeFragment"
