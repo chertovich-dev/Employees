@@ -37,11 +37,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is ErrorToMainNav -> {
-                    log("errorToMainNav")
-                    //val navOptions = NavOptions.Builder().setPopUpTo(R.id.mainFragment, true).build()
-
                     navController.navigate(R.id.action_errorFragment_to_mainFragment)
-
                     viewModel.loadEmployees(true)
                 }
 
